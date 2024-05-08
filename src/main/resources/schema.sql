@@ -1,0 +1,7 @@
+CREATE  TABLE IF NOT EXISTS students (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50),
+    email VARCHAR(50),
+    gpa DECIMAL(3,2),
+    PRIMARY KEY (id)
+);
