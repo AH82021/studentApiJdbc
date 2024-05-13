@@ -5,16 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 //bean(Object) managed by Spring Framework
-@Component
+@Repository
 public class StudentRepository {
 
 private final JdbcTemplate jdbcTemplate ;
@@ -28,6 +31,45 @@ private final JdbcTemplate jdbcTemplate ;
         String sql = "SELECT id, name,email,gpa from students";
         return jdbcTemplate.query(sql,StudentRowMapper.INSTANCE);
     }
+
+// Nazia Iqbal
+    public Long createStudent(Student student){
+       String sql = "INSERT INTO students (name,email,gpa) VALUES(?,?,?)";
+       // avoid SQL Injection attack
+// Using Keyholder to retrieve the auto-generated key
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection ->{
+            PreparedStatement ps = connection.prepareStatement(sql,new String[]{"id"});
+            ps.setString(1, student.getName());
+            ps.setString(2, student.getEmail());
+            ps.setDouble(3,student.getGpa());
+            return ps;
+        },keyHolder);
+
+        if(keyHolder.getKey() !=null){
+            return keyHolder.getKey().longValue();
+        } else {
+            throw new RuntimeException("Failed to insert student");
+        }
+
+    }
+
+    public void updateStudent(Long id,Student student){
+        String sql = "UPDATE students SET name=?,email=?, gpa=? where id=?";
+     int count =   jdbcTemplate.update(sql,student.getName(),student.getEmail(),student.getGpa(),id);
+        if(count == 0){
+            throw new RuntimeException("Student not found");
+        }
+    }
+
+    public void deleteStudent(Long id){
+        String sql = "DELETE FROM students WHERE id=?";
+        int count = jdbcTemplate.update(sql,id);
+        if(count == 0){
+            throw new RuntimeException("Student not found");
+        }
+    }
+
 
 
     public Optional<Student> findById(Long id) {

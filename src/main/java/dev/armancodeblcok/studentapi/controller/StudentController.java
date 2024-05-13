@@ -48,14 +48,20 @@ return  studentService.findAllStudents();
     @PostMapping("/add")
     public String addStudent(@RequestBody Student student) {
 
+      if(  studentService.addStudent(student)>0){
+
         return "student added successfully";
+      }
+
+      return "Unable to add Student";
+
     }
 
     @PutMapping("/update/{id}")
     public void updateStudent(@PathVariable Long id, @RequestBody Student student) {
 
+studentService.updateStudent(id,student);
 
-            System.out.println("student is already exist ");
 
 
         }
@@ -63,26 +69,16 @@ return  studentService.findAllStudents();
 
 
         @DeleteMapping("id/{id}")
-        public String deleteStudentById (@PathVariable Long id){
+        public void deleteStudentById (@PathVariable Long id){
 
-return  "student deleted successfully";
+
+   studentService.removeStudentById(id);
 
         }
 
         }
 
 
-// Client-Sever Architecture
 
-
-// REST : Representational State Transfer
-//1- Uniform Interface  : json/ html / xml formatted Resource(Representation)
-//2- Statelessness
-        //3- Cacheability:
-        // 4- -> layered System
-        //5-Client-Sever (HTTP)
-        //6- -> Code on  Demand
-
-        // 🤦 ->www.sombasa.com/zevar post ✉️ http ->  💃
 
 

@@ -8,4 +8,7 @@ import java.util.Optional;
 public interface StudentService {
     List<Student> findAllStudents();
     Optional<Student> findStudentById(Long id);
+    Long addStudent(Student student);
+    void updateStudent(Long id, Student student);
+    void removeStudentById(Long id);
 }

@@ -25,4 +25,19 @@ public class StudentServiceImplJpa implements StudentService{
     public Optional<Student> findStudentById(Long id) {
         return Optional.empty();
     }
+
+    @Override
+    public Long addStudent(Student student) {
+        return 0L;
+    }
+
+    @Override
+    public void updateStudent(Long id, Student student) {
+
+    }
+
+    @Override
+    public void removeStudentById(Long id) {
+
+    }
 }
